@@ -63,7 +63,7 @@ public class Reader {
 
     @Override
     public String toString() {
-        return "Reader {" +
+        return "\nReader {" +
                 " ID=" + id +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +

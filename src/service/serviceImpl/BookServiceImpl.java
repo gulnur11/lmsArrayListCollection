@@ -10,63 +10,59 @@ import java.util.List;
 
 public class BookServiceImpl implements BookService {
 
-    @Override
-    public Book saveBook(Long libraryId, Book book) {
-        for (Library library: Database.libraries){
-            if(library.getId()==libraryId){
-                library.getBooks().add(book);
 
-                break;
+      @Override
+    public Book saveBook(Long libraryId, Book book) {
+        for (Library library : Database.libraries) {
+            if (library.getId() == libraryId) {
+                library.getBooks().add(book);
+                return book;
             }
-        }return book;
+        }
+        System.out.println("not found!");
+        return null;
     }
+
+
+
 
     @Override
     public List<Book> getAllBooks(Long libraryId) {
-        Library library = Database.libraries.stream()
-                .filter(l -> l.getId().equals(libraryId))
-                .findFirst()
-                .orElse(null);
-
-        if (library != null) {
-            return library.getBooks();
-        }
-        return new ArrayList<>();
-    }
-
-    @Override
-    public Book getBookById(Long libraryId, Long bookId) {
-        Library library = Database.libraries.stream()
-                .filter(l -> l.getId().equals(libraryId))
-                .findFirst()
-                .orElse(null);
-
-        if (library != null) {
-            return library.getBooks().stream()
-                    .filter(b -> b.getId().equals(bookId))
-                    .findFirst()
-                    .orElse(null);
+        for (Library library :Database.libraries ) {
+            if (library.getId().equals(libraryId)) {
+                return library.getBooks();
+            }
         }
         return null;
     }
 
+
+    @Override
+    public Book getBookById(Long libraryId, Long bookId) {
+        for (Library library : Database.libraries) {
+            if (library.getId().equals(libraryId)) {
+                for (Book book : library.getBooks()) {
+                    if (book.getId().equals(bookId)) {
+                        return book;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
     @Override
     public String deleteBook(Long libraryId, Long bookId) {
-        Library library = Database.libraries.stream()
-                .filter(l -> l.getId().equals(libraryId))
-                .findFirst()
-                .orElse(null);
-
-        if (library != null) {
-            Book book = library.getBooks().stream()
-                    .filter(b -> b.getId().equals(bookId))
-                    .findFirst()
-                    .orElse(null);
-
-            if (book != null) {
-                library.getBooks().remove(book);
-                Database.books.remove(book);
-                return "Book deleted successfully.";
+        for (Library library : Database.libraries) {
+            if (library.getId().equals(libraryId)) {
+                for (Book book : library.getBooks()) {
+                    if (book.getId().equals(bookId)) {
+                        library.getBooks().remove(book);
+                        Database.books.remove(book);
+                        return "Book deleted successfully.";
+                    }
+                }
             }
         }
         return "Book not found.";
@@ -75,11 +71,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public void clearBooksByLibraryId(Long libraryId) {
-        Library library = new LibraryServiceImpl().getLibraryById(libraryId);
-        if (library != null) {
-            library.getBooks().clear();
+        for (Library library : Database.libraries) {
+            if (library.getId().equals(libraryId)) {
+                library.getBooks().clear();
+                return;
+            }
         }
     }
+
+
+
+
 
 
 }
