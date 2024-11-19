@@ -133,6 +133,7 @@ public class Main {
             }
         } catch (InputMismatchException e){
             System.out.println("Киргизилген маалымат сан эмес ! ");
+            System.out.println("test");
         }finally {
                    System.out.println(" Operation is over!");
                }
